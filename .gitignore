@@ -10,8 +10,7 @@ __pycache__/
 .Python
 
 # Data files (often too large/sensitive)
-data/*.csv
-data/*.xlsx
+data/
 *.log
 
 # Jupyter
@@ -24,3 +23,4 @@ Thumbs.db
 # IDE
 .vscode/
 .idea/
+config/
