@@ -1,0 +1,60 @@
+name: Weekly Review Sync
+
+on:
+  # Run every Monday at 9:00 AM EST (14:00 UTC)
+  schedule:
+    - cron: '0 14 * * 1'
+
+  # Allow manual triggering from GitHub UI
+  workflow_dispatch:
+
+jobs:
+  sync-reviews:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Create credentials directory
+        run: mkdir -p config/credentials
+
+      - name: Write Google OAuth credentials
+        run: echo '${{ secrets.GOOGLE_OAUTH_JSON }}' > config/credentials/google_oauth.json
+
+      - name: Write Google token (if exists)
+        if: secrets.GOOGLE_TOKEN_PICKLE != ''
+        run: echo '${{ secrets.GOOGLE_TOKEN_PICKLE }}' | base64 -d > config/credentials/google_token.pickle
+
+      - name: Create .env file
+        run: |
+          cat > .env << EOF
+          SHEET_ID=${{ secrets.SHEET_ID }}
+          SEVENSHIFT_API_KEY=${{ secrets.SEVENSHIFT_API_KEY }}
+          SEVENSHIFT_COMPANY_ID=${{ secrets.SEVENSHIFT_COMPANY_ID }}
+          MARGIES_LOCATION_ID=${{ secrets.MARGIES_LOCATION_ID }}
+          GRACKLE_LOCATION_ID=${{ secrets.GRACKLE_LOCATION_ID }}
+          LOG_LEVEL=INFO
+          EOF
+
+      - name: Sync reviews to Google Sheets
+        run: python scripts/sync_reviews.py
+
+      - name: Save updated token
+        if: always()
+        run: |
+          if [ -f config/credentials/google_token.pickle ]; then
+            echo "Token file exists, would update secret here"
+            # Note: GitHub Actions cannot update secrets automatically
+            # This is just a placeholder for manual token rotation if needed
+          fi

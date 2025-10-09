@@ -1,0 +1,47 @@
+# Review Analysis Configuration
+
+# Restaurant Configuration
+restaurants:
+  - name: "Margie's Kitchen & Cocktails"
+    sheet_name: "Margies Reviews"
+    location_id_env: "MARGIES_LOCATION_ID"
+
+  - name: "Grackle"
+    sheet_name: "Grackle Reviews"
+    location_id_env: "GRACKLE_LOCATION_ID"
+
+# Google Sheets Configuration
+sheets:
+  employee_tab: "Employees"
+  dashboard_tab: "Dashboard"
+
+  # Column headers for review sheets
+  review_columns:
+    - "Date Posted"
+    - "Date Updated"
+    - "Review Month"
+    - "Reviewer Name"
+    - "Rating"
+    - "Running Avg"
+    - "Running Avg (3 dec)"
+    - "Review Text"
+    - "Response Text"
+    - "Response Date"
+    - "Notes"
+    - "Review ID"
+    - "Restaurant"
+
+# 7shifts Configuration
+sevenshift:
+  employee_roles:
+    - "Server"
+    - "Bartender"
+    - "Host"
+    - "Manager"
+
+# Analysis Configuration
+analysis:
+  trend_periods:
+    - 7   # Last 7 days
+    - 30  # Last 30 days
+    - 90  # Last 90 days

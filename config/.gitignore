@@ -1,0 +1,11 @@
+# Ignore all credential files
+credentials/
+*.json
+*.pickle
+*.token
+*.key
+*.txt
+
+# Keep the settings file and this gitignore
+!.gitignore
+!settings.yaml
