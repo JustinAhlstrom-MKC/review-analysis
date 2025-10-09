@@ -4,6 +4,7 @@ Authentication management for Google APIs.
 Handles OAuth flow and token persistence.
 """
 
+import os
 import pickle
 from pathlib import Path
 from google.auth.transport.requests import Request
@@ -46,6 +47,20 @@ class GoogleAuthManager:
                     raise FileNotFoundError(
                         f"Credentials file not found: {self.credentials_path}\n"
                         "Please run the setup script first."
+                    )
+
+                # Check if running in CI environment
+                is_ci = os.getenv('CI') == 'true' or os.getenv('GITHUB_ACTIONS') == 'true'
+
+                if is_ci:
+                    raise RuntimeError(
+                        "❌ Cannot authenticate in CI environment without a valid token.\n"
+                        "The Google token is missing or expired.\n\n"
+                        "To fix this:\n"
+                        "1. Run the sync locally first to generate a token: python scripts/sync_reviews.py\n"
+                        "2. Encode the token: base64 config/credentials/google_token.pickle\n"
+                        "3. Update the GOOGLE_TOKEN_PICKLE secret in GitHub with the encoded value\n"
+                        "4. Re-run the workflow\n"
                     )
 
                 print("🔐 Starting OAuth authentication flow...")
