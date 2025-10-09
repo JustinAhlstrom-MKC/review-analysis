@@ -42,6 +42,7 @@ jobs:
         run: |
           cat > .env << EOF
           SHEET_ID=${{ secrets.SHEET_ID }}
+          GOOGLE_BUSINESS_ACCOUNT_ID=${{ secrets.GOOGLE_BUSINESS_ACCOUNT_ID }}
           SEVENSHIFT_API_KEY=${{ secrets.SEVENSHIFT_API_KEY }}
           SEVENSHIFT_COMPANY_ID=${{ secrets.SEVENSHIFT_COMPANY_ID }}
           MARGIES_LOCATION_ID=${{ secrets.MARGIES_LOCATION_ID }}
